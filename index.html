@@ -1,100 +1,139 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Evangelio para Peques</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6fb;
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Evangelio para Peques</title>
 
-    h1 {
-      text-align: center;
-      color: #2c3e50;
-    }
+<style>
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    display: flex;
+    justify-content: center;
+  }
 
-    textarea {
-      width: 100%;
-      height: 120px;
-      padding: 10px;
-      font-size: 14px;
-      margin-bottom: 10px;
-    }
+  .container {
+    width: 100%;
+    max-width: 900px;
+    padding: 60px 20px;
+  }
 
-    input {
-      padding: 8px;
-      width: 80px;
-      margin-bottom: 10px;
-    }
+  h1 {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
 
-    button {
-      padding: 10px 20px;
-      background: #3498db;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 4px;
-    }
+  .subtitle {
+    text-align: center;
+    color: #94a3b8;
+    margin-bottom: 40px;
+  }
 
-    button:hover {
-      background: #2980b9;
-    }
+  textarea {
+    width: 100%;
+    min-height: 180px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 16px;
+    color: white;
+    font-size: 15px;
+    resize: vertical;
+  }
 
-    #resultado {
-      margin-top: 30px;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+  input {
+    margin-top: 15px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    width: 120px;
+  }
 
-    h2 {
-      margin-top: 20px;
-      color: #34495e;
-    }
+  button {
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: #6366f1;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+  }
 
-    p {
-      line-height: 1.6;
-    }
-  </style>
+  button:hover {
+    background: #4f46e5;
+  }
+
+  .card {
+    margin-top: 40px;
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid #334155;
+  }
+
+  h2 {
+    margin-top: 30px;
+    color: #a5b4fc;
+  }
+
+  .loading {
+    margin-top: 20px;
+    color: #94a3b8;
+  }
+</style>
 </head>
+
 <body>
 
-<h1>Evangelio para Peques</h1>
+<div class="container">
+  <h1>Evangelio para Peques</h1>
+  <div class="subtitle">
+    Convierte el Evangelio en una enseñanza clara para niños
+  </div>
 
-<textarea id="evangelio" placeholder="Pega aquí el evangelio..."></textarea>
-<br>
-<input id="edad" type="number" placeholder="Edad">
-<br>
-<button onclick="generar()">Generar</button>
+  <textarea id="evangelio" placeholder="Pega aquí el evangelio..."></textarea>
+  <br>
+  <input id="edad" type="number" placeholder="Edad">
+  <br>
+  <button onclick="generar()">Generar enseñanza</button>
 
-<div id="resultado"></div>
+  <div id="loading" class="loading"></div>
+  <div id="resultado"></div>
+</div>
 
 <script>
-  async function generar() {
-    const evangelio = document.getElementById("evangelio").value;
-    const edad = document.getElementById("edad").value;
+async function generar() {
+  const evangelio = document.getElementById("evangelio").value;
+  const edad = document.getElementById("edad").value;
+  const resultadoDiv = document.getElementById("resultado");
+  const loadingDiv = document.getElementById("loading");
 
-    const response = await fetch("/api/evangelio", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ evangelio, edad })
-    });
+  loadingDiv.innerText = "Generando enseñanza...";
+  resultadoDiv.innerHTML = "";
 
-    const data = await response.json();
+  const response = await fetch("/api/evangelio", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ evangelio, edad })
+  });
 
-    if (data.error) {
-      document.getElementById("resultado").innerHTML =
-        "<p style='color:red;'>Error: " + data.error + "</p>";
-      return;
-    }
+  const data = await response.json();
+  loadingDiv.innerText = "";
 
-    document.getElementById("resultado").innerHTML = `
+  if (data.error) {
+    resultadoDiv.innerHTML = "<div class='card'>Error: " + data.error + "</div>";
+    return;
+  }
+
+  resultadoDiv.innerHTML = `
+    <div class="card">
       <h2>Cuento</h2>
       <p>${data.cuento}</p>
 
@@ -106,8 +145,9 @@
 
       <h2>Oración</h2>
       <p>${data.oracion}</p>
-    `;
-  }
+    </div>
+  `;
+}
 </script>
 
 </body>

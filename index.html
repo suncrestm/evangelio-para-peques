@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Evangelio para Peques</title>
+</head>
+<body>
+
+  <h1>Evangelio para Peques</h1>
+
+  <textarea id="evangelio" rows="6" cols="60" placeholder="Pega aquí el evangelio"></textarea>
+  <br><br>
+
+  <input type="number" id="edad" placeholder="Edad del niño">
+  <br><br>
+
+  <button onclick="generar()">Generar</button>
+
+  <hr>
+
+  <pre id="resultado"></pre>
+
+  <script>
+    async function generar() {
+      const evangelio = document.getElementById("evangelio").value;
+      const edad = document.getElementById("edad").value;
+
+      const response = await fetch("/api/evangelio", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ evangelio, edad })
+      });
+
+      const data = await response.json();
+
+      document.getElementById("resultado").textContent = JSON.stringify(data, null, 2);
+    }
+  </script>
+
+</body>
+</html>

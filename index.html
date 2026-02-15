@@ -21,23 +21,41 @@
   <pre id="resultado"></pre>
 
   <script>
-    async function generar() {
-      const evangelio = document.getElementById("evangelio").value;
-      const edad = document.getElementById("edad").value;
+  async function generar() {
+    const evangelio = document.getElementById("evangelio").value;
+    const edad = document.getElementById("edad").value;
 
-      const response = await fetch("/api/evangelio", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ evangelio, edad })
-      });
+    const response = await fetch("/api/evangelio", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ evangelio, edad })
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      document.getElementById("resultado").textContent = JSON.stringify(data, null, 2);
+    if (data.error) {
+      document.getElementById("resultado").textContent = "Error: " + data.error;
+      return;
     }
-  </script>
+
+    document.getElementById("resultado").innerHTML = `
+      <h2>Cuento</h2>
+      <p>${data.cuento}</p>
+
+      <h2>Analogía</h2>
+      <p>${data.analogia}</p>
+
+      <h2>Historia</h2>
+      <p>${data.historia}</p>
+
+      <h2>Oración</h2>
+      <p>${data.oracion}</p>
+    `;
+  }
+</script>
+
 
 </body>
 </html>

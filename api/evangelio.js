@@ -16,8 +16,12 @@ export default async function handler(req, res) {
 
     return res.status(200).json(resultado);
 
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Error interno" });
-  }
+  }catch (error) {
+  console.error("ERROR REAL:", error);
+  return res.status(500).json({
+    error: "Error interno",
+    detalle: error.message
+  });
+}
+
 }

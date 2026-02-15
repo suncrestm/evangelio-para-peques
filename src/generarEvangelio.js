@@ -13,7 +13,7 @@ Toma el siguiente evangelio:
 
 Adáptalo para un niño de ${edad} años.
 
-Devuelve 4 secciones claras en formato JSON:
+Devuelve únicamente un JSON válido con esta estructura exacta:
 
 {
   "cuento": "...",
@@ -28,14 +28,21 @@ Reglas:
 - No inventar doctrinas
 - No agregar moralejas modernas
 - Mantener enfoque cristiano claro
+- No usar markdown
+- No usar bloques de código
+- No agregar texto fuera del JSON
 `;
 
   const response = await client.responses.create({
     model: "gpt-4.1-mini",
-    input: prompt
+    input: prompt,
+    response_format: {
+      type: "json_object"
+    }
   });
 
-  const text = response.output_text;
+  // Esto garantiza que tomamos el texto correcto
+  const text = response.output[0].content[0].text;
 
   return JSON.parse(text);
 }

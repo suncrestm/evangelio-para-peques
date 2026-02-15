@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { SYSTEM_PROMPT } from "./systemPrompt.mjs";
+import { SYSTEM_PROMPT } from "./systemPrompt.js";
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY

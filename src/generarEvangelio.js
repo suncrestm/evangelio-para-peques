@@ -36,12 +36,13 @@ Reglas:
   const response = await client.responses.create({
     model: "gpt-4.1-mini",
     input: prompt,
-    response_format: {
-      type: "json_object"
+    text: {
+      format: {
+        type: "json_object"
+      }
     }
   });
 
-  // Esto garantiza que tomamos el texto correcto
   const text = response.output[0].content[0].text;
 
   return JSON.parse(text);

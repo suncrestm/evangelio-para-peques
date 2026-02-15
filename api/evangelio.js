@@ -1,6 +1,6 @@
-import { generarEvangelio } from "../src/generarEvangelio.mjs";
+const { generarEvangelio } = require("../src/generarEvangelio.mjs");
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Solo se permite POST" });
   }
@@ -20,4 +20,4 @@ export default async function handler(req, res) {
     console.error(error);
     return res.status(500).json({ error: "Error interno" });
   }
-}
+};

@@ -6,15 +6,15 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { evangelio, modo } = req.body;
+    const { evangelio, edad } = req.body;
 
-    if (!evangelio || !modo) {
+    if (!evangelio || !edad) {
       return res.status(400).json({ error: "Faltan datos" });
     }
 
-    const resultado = await generarEvangelio({ evangelio, modo });
+    const resultado = await generarEvangelio({ evangelio, edad });
 
-    return res.status(200).json({ resultado });
+    return res.status(200).json(resultado);
 
   } catch (error) {
     console.error(error);

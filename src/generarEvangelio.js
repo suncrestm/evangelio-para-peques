@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 export async function generarEvangelio({ evangelio, edad }) {
@@ -36,14 +36,12 @@ Reglas:
   const response = await client.responses.create({
     model: "gpt-4.1-mini",
     input: prompt,
-    text: {
-      format: {
-        type: "json_object"
-      }
-    }
+    response_format: { type: "json_object" }
   });
 
-  const text = response.output[0].content[0].text;
+  if (!response.output_text) {
+    throw new Error("No se recibió texto del modelo");
+  }
 
-  return JSON.parse(text);
+  return JSON.parse(response.output_text);
 }
